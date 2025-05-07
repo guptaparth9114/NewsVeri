@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
-import { Search, Menu, X, User, LogOut,Clock } from 'lucide-react';
-import { fetchNewsByCategory } from '../services/api';
-import NewsCard, { NewsItem } from '../components/NewsCard';
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
+import { Search, Menu, X, User, LogOut, Clock } from "lucide-react";
+import { fetchNewsByCategory } from "../services/api";
+import NewsCard, { NewsItem } from "../components/NewsCard";
 
 type Category = {
   id: string;
@@ -11,19 +11,19 @@ type Category = {
 };
 
 const categories: Category[] = [
-  { id: 'world', name: 'World' },
-  { id: 'business', name: 'Business' },
-  { id: 'technology', name: 'Technology' },
-  { id: 'entertainment', name: 'Entertainment' },
-  { id: 'sports', name: 'Sports' },
-  { id: 'science', name: 'Science' },
-  { id: 'health', name: 'Health' },
+  { id: "world", name: "World" },
+  { id: "business", name: "Business" },
+  { id: "technology", name: "Technology" },
+  { id: "entertainment", name: "Entertainment" },
+  { id: "sports", name: "Sports" },
+  { id: "science", name: "Science" },
+  { id: "health", name: "Health" },
 ];
 
 const Navbar: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState("");
   const [newsResults, setNewsResults] = useState([]);
   const [loading, setLoading] = useState(false);
   const { user, logout } = useAuth();
@@ -32,24 +32,24 @@ const Navbar: React.FC = () => {
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     // Handle search functionality
-    console.log('Searching for:', searchQuery);
+    console.log("Searching for:", searchQuery);
     // Navigate to search results page
     // navigate(`/search?q=${encodeURIComponent(searchQuery)}`);
   };
   const handleCategoryClick = async (categoryId: string) => {
-    setLoading(true);                      // ← start loading
+    setLoading(true); // ← start loading
     try {
       const data = await fetchNewsByCategory(categoryId);
       setNewsResults(data);
     } catch (err) {
       console.error(err);
     } finally {
-      setLoading(false);                   // ← stop loading
+      setLoading(false); // ← stop loading
     }
   };
   const handleLogout = () => {
     logout();
-    navigate('/');
+    navigate("/");
     setIsUserMenuOpen(false);
   };
 
@@ -60,21 +60,25 @@ const Navbar: React.FC = () => {
         <Link to="/" className="text-2xl font-serif font-bold text-blue-900">
           Veri-News
         </Link>
-        
+
         <div className="hidden md:flex items-center space-x-4">
           <form onSubmit={handleSearch} className="relative">
-            <input
-              type="text"
-              placeholder="Search news..."
-              className="px-4 py-1 pr-8 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            <select
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-            />
-            <button type="submit" className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-blue-700">
-              <Search size={18} />
-            </button>
+              className="px-4 py-1 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              <option value="">Select category...</option>
+              <option value="world">World</option>
+              <option value="business">Business</option>
+              <option value="technology">Technology</option>
+              <option value="entertainment">Entertainment</option>
+              <option value="sports">Sports</option>
+              <option value="science">Science</option>
+              <option value="health">Health</option>
+            </select>
           </form>
-          
+
           {user ? (
             <div className="relative">
               <button
@@ -84,7 +88,7 @@ const Navbar: React.FC = () => {
                 <User size={20} />
                 <span className="hidden sm:inline">{user.name}</span>
               </button>
-              
+
               {isUserMenuOpen && (
                 <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50">
                   <Link
@@ -124,7 +128,7 @@ const Navbar: React.FC = () => {
             </div>
           )}
         </div>
-        
+
         <button
           onClick={() => setIsMenuOpen(!isMenuOpen)}
           className="md:hidden text-gray-700"
@@ -132,7 +136,7 @@ const Navbar: React.FC = () => {
           {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
       </div>
-      
+
       {/* Mobile menu */}
       {isMenuOpen && (
         <div className="md:hidden bg-white px-4 py-2 shadow-inner">
@@ -145,12 +149,15 @@ const Navbar: React.FC = () => {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
-              <button type="submit" className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-blue-700">
+              <button
+                type="submit"
+                className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-blue-700"
+              >
                 <Search size={18} />
               </button>
             </div>
           </form>
-          
+
           <div className="space-y-2 mb-4">
             {categories.map((category) => (
               <Link
@@ -163,7 +170,7 @@ const Navbar: React.FC = () => {
               </Link>
             ))}
           </div>
-          
+
           {user ? (
             <div className="border-t border-gray-200 pt-2 space-y-2">
               <Link
@@ -207,50 +214,45 @@ const Navbar: React.FC = () => {
           )}
         </div>
       )}
-      
+
       {/* Categories Nav */}
       <nav className="hidden md:block bg-blue-900 text-white">
         <div className="container mx-auto px-4">
           <ul className="flex overflow-x-auto space-x-6 py-2">
             {categories.map((category) => (
               <li key={category.id}>
-             
-  <button
-    onClick={async () => {
-      const data = await handleCategoryClick(category.id);
-      //navigate(`/category/${category.id}`, { state: { results: data } });
-    }}
-    className="whitespace-nowrap hover:text-blue-200 transition-colors py-1 inline-block text-left"
-  >
-    {category.name}
-  </button>
-</li>
-
-              
+                <button
+                  onClick={async () => {
+                    const data = await handleCategoryClick(category.id);
+                    //navigate(`/category/${category.id}`, { state: { results: data } });
+                  }}
+                  className="whitespace-nowrap hover:text-blue-200 transition-colors py-1 inline-block text-left"
+                >
+                  {category.name}
+                </button>
+              </li>
             ))}
           </ul>
         </div>
       </nav>
-    {/* Loading Overlay */}
-    {loading && (
+      {/* Loading Overlay */}
+      {loading && (
         <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
           <Clock size={48} className="text-white animate-spin" />
         </div>
       )}
 
-       {/* Render news results directly on homepage */}
-       <div className="news-cards grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4">
-        {newsResults.length > 0 && !loading ? (
-          newsResults.map((item, idx) => (
-            <NewsCard key={idx} news={item} isPremium={!!user?.isPremium} />
-          ))
-        ) : (
-          !loading && (
-            <p className="e-0 text-center text-gray-600">
-              Select a category above to load news.
-            </p>
-          )
-        )}
+      {/* Render news results directly on homepage */}
+      <div className="news-cards grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4">
+        {newsResults.length > 0 && !loading
+          ? newsResults.map((item, idx) => (
+              <NewsCard key={idx} news={item} isPremium={!!user?.isPremium} />
+            ))
+          : !loading && (
+              <p className="e-0 text-center text-gray-600">
+                Select a category above to load news.
+              </p>
+            )}
       </div>
     </header>
   );

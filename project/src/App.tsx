@@ -9,6 +9,7 @@ import Dashboard from './pages/Dashboard';
 import { AuthProvider } from './context/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
 import Profile from './pages/Profile';
+import CategoryPage from './pages/CategoryPage'; // Adjust path as needed
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
             <Route path="login" element={<Login />} />
             <Route path="register" element={<Register />} />
             <Route path="premium" element={<Premium />} />
+            <Route path="/category/:id" element={<CategoryPage />} />
             <Route 
               path="dashboard" 
               element={

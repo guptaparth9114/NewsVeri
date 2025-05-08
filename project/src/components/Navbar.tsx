@@ -224,7 +224,7 @@ const Navbar: React.FC = () => {
                 <button
                   onClick={async () => {
                     const data = await handleCategoryClick(category.id);
-                    //navigate(`/category/${category.id}`, { state: { results: data } });
+                    navigate(`/category/${category.id}`, { state: { results: data } });
                   }}
                   className="whitespace-nowrap hover:text-blue-200 transition-colors py-1 inline-block text-left"
                 >
